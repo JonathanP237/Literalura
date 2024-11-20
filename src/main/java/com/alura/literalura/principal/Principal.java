@@ -1,14 +1,16 @@
 package com.alura.literalura.principal;
 
+import com.alura.literalura.model.Datos;
 import com.alura.literalura.model.DatosLibro;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConvierteDatos;
 import org.hibernate.boot.model.internal.XMLContext;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Principal {
-    private static final String URL_BASE = "https://gutendex.com/books/";
+    private static final String URL_BASE = "https://gutendex.com/books/?search=";
     private Scanner scanner = new Scanner(System.in);
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConvierteDatos conversor = new ConvierteDatos();
@@ -37,11 +39,36 @@ public class Principal {
             }
         }
     }
-    private DatosLibro getDatosLibro(){
-        return null;
+
+    private Optional<DatosLibro> getDatosLibro() {
+        System.out.println("Ingrese el nombre del libro que desea buscar:");
+        var nombreLibro = scanner.nextLine();
+        var json = consumoApi.obtenerDatos(URL_BASE + nombreLibro.replace(" ", "+"));
+        var datosBusqueda = conversor.obternerDatos(json, Datos.class);
+        Optional<DatosLibro> libroBuscado = datosBusqueda.libros().stream()
+                .filter(l -> l.titulo().toUpperCase().contains(nombreLibro.toUpperCase()))
+                .findFirst();
+        return libroBuscado;
     }
-    private void buscarLibroPorTitulo(){
-        var json = consumoApi.obtenerDatos(URL_BASE);
-        System.out.println(json);
+
+    private void buscarLibroPorTitulo() {
+        var libroBuscado = getDatosLibro();
+        if(libroBuscado.isPresent()){
+            var libro = libroBuscado.get();
+            var autores = libro.autor().stream()
+                    .map(a -> a.nombre())
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("N/A");
+            System.out.printf("""
+                ------------------------------------------------------------
+                Libro Encontrado:
+                Titulo: %s
+                Autor(es): %s
+                Idiomas: %s
+                ------------------------------------------------------------
+                """, libro.titulo(), autores, String.join(", ", libro.idiomas()));
+        } else {
+            System.out.println("Libro no encontrado");
+        }
     }
 }
