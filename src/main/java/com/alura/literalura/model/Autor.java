@@ -4,27 +4,34 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Entity
 @Table(name = "autores")
 public class Autor {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique=true)
+
+    @Column(unique = true)
     private String nombre;
+
     private String fechaNacimiento;
     private String fechaMuerte;
+
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Libro> libros;
 
-    public Autor(){}
+    public Autor() {
+    }
 
-    public Autor(DatosAutor datos){
+    public Autor(DatosAutor datos) {
         this.nombre = datos.nombre();
         this.fechaNacimiento = datos.fechaNacimiento();
         this.fechaMuerte = datos.fechaMuerte();
     }
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -61,7 +68,18 @@ public class Autor {
         return libros;
     }
 
-    public void addLibro(Libro libro) {
-        this.libros.add(libro);
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
+    }
+
+    @Override
+    public String toString() {
+        String librosTitulos = libros.stream()
+                .map(Libro::getTitulo)
+                .collect(Collectors.joining(", "));
+        return  " Nombre= " + nombre + '\n' +
+                " Libros= " + librosTitulos+ '\n' +
+                " Fecha nacimiento= " + fechaNacimiento + '\n' +
+                " Fecha muerte= " + fechaMuerte;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LiteraluraApplication implements CommandLineRunner {
 	@Autowired
 	private LibroRepository repositoryLibros;
+	@Autowired
 	private AutorRepository repositoryAutores;
 	public static void main(String[] args) {
 		SpringApplication.run(LiteraluraApplication.class, args);
