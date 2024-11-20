@@ -1,12 +1,17 @@
 package com.alura.literalura.principal;
 
 import com.alura.literalura.model.DatosLibro;
+import com.alura.literalura.service.ConsumoApi;
+import com.alura.literalura.service.ConvierteDatos;
 import org.hibernate.boot.model.internal.XMLContext;
 
 import java.util.Scanner;
 
 public class Principal {
+    private static final String URL_BASE = "https://gutendex.com/books/";
     private Scanner scanner = new Scanner(System.in);
+    private ConsumoApi consumoApi = new ConsumoApi();
+    private ConvierteDatos conversor = new ConvierteDatos();
 
     public void mostrarMenu() {
         var opcion = "-1";
@@ -36,6 +41,7 @@ public class Principal {
         return null;
     }
     private void buscarLibroPorTitulo(){
-
+        var json = consumoApi.obtenerDatos(URL_BASE);
+        System.out.println(json);
     }
 }
