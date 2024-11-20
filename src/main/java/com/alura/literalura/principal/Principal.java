@@ -2,6 +2,8 @@ package com.alura.literalura.principal;
 
 import com.alura.literalura.model.Datos;
 import com.alura.literalura.model.DatosLibro;
+import com.alura.literalura.repository.AutorRepository;
+import com.alura.literalura.repository.LibroRepository;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConvierteDatos;
 import org.hibernate.boot.model.internal.XMLContext;
@@ -14,6 +16,13 @@ public class Principal {
     private Scanner scanner = new Scanner(System.in);
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConvierteDatos conversor = new ConvierteDatos();
+    private LibroRepository repositoryLibros;
+    private AutorRepository repositoryAutores;
+
+    public Principal(LibroRepository repositoryLibros, AutorRepository repositoryAutores){
+        this.repositoryLibros = repositoryLibros;
+        this.repositoryAutores = repositoryAutores;
+    }
 
     public void mostrarMenu() {
         var opcion = "-1";
