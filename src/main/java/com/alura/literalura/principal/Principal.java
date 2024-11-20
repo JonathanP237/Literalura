@@ -82,7 +82,9 @@ public class Principal {
                     Descargas: %s
                     ------------------------------------------------------------
                     """, libro.titulo(), autores, String.join(", ", libro.idiomas()), libro.numeroDescargas());
+            
             Autor autor = new Autor(libro.autor().get(0));
+
             if (repositoryAutores.findByNombre(autor.getNombre()) == null) {
                 repositoryAutores.save(autor);
             }

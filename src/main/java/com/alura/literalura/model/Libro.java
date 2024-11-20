@@ -20,7 +20,7 @@ public class Libro {
     public Libro(){}
 
     public Libro(DatosLibro datos, Autor autor) {
-        this.titulo = datos.titulo();
+        this.titulo = datos.titulo().substring(0, 255);
         this.autor = autor;
         this.idiomas = datos.idiomas().stream()
                 .reduce((a, b) -> a + ", " + b)
