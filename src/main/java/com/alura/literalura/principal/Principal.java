@@ -82,14 +82,14 @@ public class Principal {
                     Descargas: %s
                     ------------------------------------------------------------
                     """, libro.titulo(), autores, String.join(", ", libro.idiomas()), libro.numeroDescargas());
-            
+
             Autor autor = new Autor(libro.autor().get(0));
 
             if (repositoryAutores.findByNombre(autor.getNombre()) == null) {
                 repositoryAutores.save(autor);
             }
             if (repositoryLibros.findByTitulo(libro.titulo()) == null) {
-                repositoryLibros.save(new Libro(libro, autor));
+                repositoryLibros.save(new Libro(libro, repositoryAutores.findByNombre(autor.getNombre())));
             }
         } else {
             System.out.println("Libro no encontrado");
